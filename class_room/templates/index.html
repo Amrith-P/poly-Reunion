@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html>
+<head>
+  {% load static %}
+  <title>Classroom Recreation</title>
+  <meta name="viewport" content="width=1750px, initial-scale=0.1">
+  <style>
+    body {
+font-family: Arial, sans-serif;
+margin: 30px;
+padding: 5px;
+background-image: url("{% static 'imagepoly.jpg' %}");  
+background-size: cover;
+background-position: center center;
+background-attachment: fixed;
+}
+
+body::before {
+content: "";
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-image: inherit; /* Use the same background image as the body */
+background-size: cover;
+background-position: center center;
+background-attachment: fixed;
+filter: blur(5px); /* Adjust the blur amount as needed */
+z-index: -1; /* Put the pseudo-element behind the body content */
+}
+
+  html, 
+  .page {
+    height: 100%;
+  }
+  h1 {
+      font-size: 80px;
+    display: inline-block;
+    padding: 30px;
+    padding-left: 150px;
+    padding-right: 150px;
+    border: 6px solid rgb(7, 7, 7);
+    background-color: yellow;
+    border-radius: 30px;
+    margin-bottom: 150px;
+
+  }
+  h2 {
+    font-size: 15px;
+  }
+
+
+  .page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .box-container {
+    display: flex;
+    padding-top: 20px;
+    gap: 2cm;
+    align-items: center;
+  }
+  .box-container2 {
+      margin-top: 50px;
+      margin-bottom: 100px;
+     padding-top: 20px;
+     gap: 2cm;
+   
+  }
+
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rectangle-box {
+    width: 400px;
+    height: 87px;
+    background-color: rgb(50, 75, 83);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #0a0a0a;
+    border-radius: 30px;
+    text-shadow:0 0 3px #4025f0;
+    font-size: 40px;
+  } 
+
+  .rectangle-box2 {
+      width: 600px;
+    height: 250px;
+    background-color: rgb(50, 75, 83);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #333;
+    font-size: 30px;
+    position: relative;
+  }
+
+  .row {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+
+
+.square-slot {
+width: 50px;
+height: 80px;
+margin: 10px;
+background-image: url("{% static 'user.jpg' %}"); 
+background-size: cover;
+background-position: center; 
+display: flex;
+align-items: center;
+justify-content: center;
+border: 4px solid #0b0b0b;
+border-radius: 15px;
+font-size: 3px;
+position: relative;
+white-space: nowrap; 
+overflow: hidden; 
+text-overflow: ellipsis; 
+text-shadow: 0 0 10px rgb(10, 10, 10); /* Add yellow glow effect */
+box-shadow: 0 0 10px yellow; /* Add a yellow glow effect as an outer border */
+} */
+
+
+.square-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius:15px;
+    display: none;
+  }
+
+.square-slot.active img { 
+    display: flex;
+  }
+
+  .square-slot {
+width: 70px;
+height: 91px;
+margin: 10px;
+background-color: rgb(50, 75, 83);
+border: 4px solid #0b0b0b;
+border-radius: 15px;
+font-size: 3px;
+position: relative;
+overflow: hidden;
+}
+
+.image-container {
+width: 100%;
+height: 100%;
+overflow: hidden;
+border-radius: 0px; /* Adjust the border radius to match the square slot's border radius */
+}
+
+.image-container img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.footer {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+background-color: #333;
+color: white;
+padding: 20px;
+margin-top: 50px;
+}
+
+.footer-text {
+padding-top: 20px;
+padding-bottom: 20px;
+font-size: 80px;
+margin: 5px;
+}
+
+
+.name-tag {
+  position: absolute;
+  margin-bottom: 1px;
+  bottom: 3px;
+  font-weight: bold;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 7px;
+  color: rgb(10, 10, 10);
+  padding: 2px 8px;
+  padding-bottom: 1px;
+  background-color: #ffffff;
+  border: 1px solid black; /* Add a black border around the name tag */
+  border-radius: 4px;
+  box-shadow: 0 0 10px #2c2ac3;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 30px;
+  box-shadow: 0 4px 8px rgba(220, 191, 191, 0.77);
+  z-index: 9999;
+  display: none;
+  width: 400px;
+  max-width: 80%;
+  border-radius: 8px;
+}
+
+.popup h2 {
+  font-size: 26px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.popup input {
+  margin-bottom: 20px;
+  width: 100%;
+  color: #1d1616;
+  font-size: 18px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.popup img {
+  max-width: 100%;
+  max-height: 250px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.popup button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.popup button:hover {
+  background-color: #0056b3;
+}
+  
+  .file-label {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+
+  .container {
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.box {
+width: 650px;
+height: 350px;
+display: flex;
+font-size: 60px;
+text-shadow: 0 0 3px blue;
+align-items: center;
+justify-content: center;
+margin-top: 150px;
+background-color: rgb(50, 75, 83);
+border: 2px solid black;
+border-radius: 30px;
+
+}
+
+@media (max-width: 768px) {
+.box-container {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.column {
+  margin-bottom: 20px;
+}
+
+.rectangle-box {
+  width: 100%;
+}
+.rectangle-box,
+.square-slot,
+.name-tag,
+.popup input,
+.popup img,
+.popup button,
+.file-label {
+  font-size: 18px;
+}
+}
+
+</style>
+</head>
+<body>
+  <div class="page" style="margin-top: 100px;">
+    <h1>CLASS ROOM RECREATION</h1>
+    <div class="box-container">
+      <!-- First Column -->
+      <div class="column">
+        <div class="row">
+          <!-- Girls Bench 5 -->
+          {% for bench15 in bench15 %}
+          <a href="{% url 'class_room:edit_bench15' bench_id=bench15.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+            <div class="image-container">
+              {% if bench15.student_image %}
+                <img src="{{ bench15.student_image.url }}" alt="{{ bench15.bench_name }}">
+              {% endif %}
+            </div>
+            <div class="name-tag">
+              {% if bench15.student_name %}
+                {{ bench15.student_name }}
+              {% else %}
+                Add Details
+              {% endif %}
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+        <div class="rectangle-box">Bench 5</div>
+
+        <div class="row">
+            {% for bench14 in bench14 %}
+            <a href="{% url 'class_room:edit_bench14' bench_id=bench14.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench14.student_image %}
+                  <img src="{{ bench14.student_image.url }}" alt="{{ bench14.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench14.student_name %}
+                  {{ bench14.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 4</div>
+
+
+          <div class="row">
+            {% for bench13 in bench13 %}
+            <a href="{% url 'class_room:edit_bench13' bench_id=bench13.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench13.student_image %}
+                  <img src="{{ bench13.student_image.url }}" alt="{{ bench13.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench13.student_name %}
+                  {{ bench13.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 3</div>
+
+
+          <div class="row">
+            {% for bench12 in bench12 %}
+            <a href="{% url 'class_room:edit_bench12' bench_id=bench12.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench12.student_image %}
+                  <img src="{{ bench12.student_image.url }}" alt="{{ bench12.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench12.student_name %}
+                  {{ bench12.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 2</div>
+
+
+          <div class="row">
+            {% for bench11 in bench11 %}
+            <a href="{% url 'class_room:edit_bench11' bench_id=bench11.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench11.student_image %}
+                  <img src="{{ bench11.student_image.url }}" alt="{{ bench11.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench11.student_name %}
+                  {{ bench11.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          
+          
+          
+          
+          
+         <div class="rectangle-box">Bench 1</div>
+
+      </div>
+      <!-- End of First Column -->
+
+      <!-- Second Column -->
+      <div class="column">
+        <div class="row">
+          <!-- Bench 5 -->
+          {% for bench25 in bench25 %}
+          <a href="{% url 'class_room:edit_bench25' bench_id=bench25.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+            <div class="image-container">
+              {% if bench25.student_image %}
+                <img src="{{ bench25.student_image.url }}" alt="{{ bench25.bench_name }}">
+              {% endif %}
+            </div>
+            <div class="name-tag">
+              {% if bench25.student_name %}
+                {{ bench25.student_name }}
+              {% else %}
+                Add Details
+              {% endif %}
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+        <div class="rectangle-box">Bench 5</div>
+
+        <div class="row">
+            {% for bench24 in bench24 %}
+            <a href="{% url 'class_room:edit_bench24' bench_id=bench24.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench24.student_image %}
+                  <img src="{{ bench24.student_image.url }}" alt="{{ bench24.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench24.student_name %}
+                  {{ bench24.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 4</div>
+
+
+          <div class="row">
+            {% for bench23 in bench23 %}
+            <a href="{% url 'class_room:edit_bench23' bench_id=bench23.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench23.student_image %}
+                  <img src="{{ bench23.student_image.url }}" alt="{{ bench23.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench23.student_name %}
+                  {{ bench23.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 3</div>
+
+
+          <div class="row">
+            {% for bench22 in bench22 %}
+            <a href="{% url 'class_room:edit_bench22' bench_id=bench22.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench22.student_image %}
+                  <img src="{{ bench22.student_image.url }}" alt="{{ bench22.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench22.student_name %}
+                  {{ bench22.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 2</div>
+
+
+          <div class="row">
+            {% for bench21 in bench21 %}
+            <a href="{% url 'class_room:edit_bench21' bench_id=bench21.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench21.student_image %}
+                  <img src="{{ bench21.student_image.url }}" alt="{{ bench21.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench21.student_name %}
+                  {{ bench21.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          
+          
+          
+          
+          
+         <div class="rectangle-box">Bench 1</div>
+
+      </div>
+      <!-- End of Second Column -->
+
+      <!-- Third Column -->
+      <div class="column">
+        <div class="row">
+          <!-- Bench 35 -->
+          {% for bench35 in bench35 %}
+          <a href="{% url 'class_room:edit_bench35' bench_id=bench35.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+            <div class="image-container">
+              {% if bench35.student_image %}
+                <img src="{{ bench35.student_image.url }}" alt="{{ bench35.bench_name }}">
+              {% endif %}
+            </div>
+            <div class="name-tag">
+              {% if bench35.student_name %}
+                {{ bench35.student_name }}
+              {% else %}
+                Add Details
+              {% endif %}
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+        <div class="rectangle-box">Bench 5</div>
+
+        <div class="row">
+            {% for bench34 in bench34 %}
+            <a href="{% url 'class_room:edit_bench34' bench_id=bench34.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench34.student_image %}
+                  <img src="{{ bench34.student_image.url }}" alt="{{ bench34.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench34.student_name %}
+                  {{ bench34.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 4</div>
+
+
+          <div class="row">
+            {% for bench33 in bench33 %}
+            <a href="{% url 'class_room:edit_bench33' bench_id=bench33.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench33.student_image %}
+                  <img src="{{ bench33.student_image.url }}" alt="{{ bench33.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench33.student_name %}
+                  {{ bench33.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 3</div>
+
+
+          <div class="row">
+            {% for bench32 in bench32 %}
+            <a href="{% url 'class_room:edit_bench32' bench_id=bench32.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench32.student_image %}
+                  <img src="{{ bench32.student_image.url }}" alt="{{ bench32.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench32.student_name %}
+                  {{ bench32.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 2</div>
+
+
+          <div class="row">
+            {% for bench31 in bench31 %}
+            <a href="{% url 'class_room:edit_bench31' bench_id=bench31.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench31.student_image %}
+                  <img src="{{ bench31.student_image.url }}" alt="{{ bench31.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench31.student_name %}
+                  {{ bench31.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          
+          
+          
+          
+          
+         <div class="rectangle-box">Bench 1</div>
+
+      </div>
+      <!-- End of Third Column -->
+
+      <!-- Fourth Column -->
+      <div class="column">
+        <div class="row">
+          <!-- Bench 45 -->
+          {% for bench45 in bench45 %}
+          <a href="{% url 'class_room:edit_bench45' bench_id=bench45.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+            <div class="image-container">
+              {% if bench45.student_image %}
+                <img src="{{ bench45.student_image.url }}" alt="{{ bench45.bench_name }}">
+              {% endif %}
+            </div>
+            <div class="name-tag">
+              {% if bench45.student_name %}
+                {{ bench45.student_name }}
+              {% else %}
+                Add Details
+              {% endif %}
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+
+        <div class="rectangle-box">Bench 5</div>
+
+        <div class="row">
+            {% for bench44 in bench44 %}
+            <a href="{% url 'class_room:edit_bench44' bench_id=bench44.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench44.student_image %}
+                  <img src="{{ bench44.student_image.url }}" alt="{{ bench44.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench44.student_name %}
+                  {{ bench44.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 4</div>
+
+
+          <div class="row">
+            {% for bench43 in bench43 %}
+            <a href="{% url 'class_room:edit_bench43' bench_id=bench43.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench43.student_image %}
+                  <img src="{{ bench43.student_image.url }}" alt="{{ bench43.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench43.student_name %}
+                  {{ bench43.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 3</div>
+
+
+          <div class="row">
+            {% for bench42 in bench42 %}
+            <a href="{% url 'class_room:edit_bench42' bench_id=bench42.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench42.student_image %}
+                  <img src="{{ bench42.student_image.url }}" alt="{{ bench42.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench42.student_name %}
+                  {{ bench42.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+
+
+          <div class="rectangle-box">Bench 2</div>
+
+
+          <div class="row">
+            {% for bench41 in bench41 %}
+            <a href="{% url 'class_room:edit_bench41' bench_id=bench41.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+              <div class="image-container">
+                {% if bench41.student_image %}
+                  <img src="{{ bench41.student_image.url }}" alt="{{ bench41.bench_name }}">
+                {% endif %}
+              </div>
+              <div class="name-tag">
+                {% if bench41.student_name %}
+                  {{ bench41.student_name }}
+                {% else %}
+                  Add Details
+                {% endif %}
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          
+          
+          
+          
+          
+         <div class="rectangle-box">Bench 1</div>
+
+      </div>
+      <!-- End of Fourth Column -->
+
+    </div>
+  </div>
+  <div class="container">
+    <div class="box">Teacher's Desk</div>
+  </div>
+<div class="box-container2"> 
+
+
+  <div class="row">
+    {% for bench26 in bench26 %}
+    <a href="{% url 'class_room:edit_bench26' bench_id=bench26.id %}" class="square-slot" id="slot-{{ forloop.counter }}" data-password="CE1998">
+      <div class="image-container">
+        {% if bench26.student_image %}
+          <img src="{{ bench26.student_image.url }}" alt="{{ bench26.bench_name }}">
+        {% endif %}
+      </div>
+      <div class="name-tag">
+        {% if bench26.student_name %}
+          {{ bench26.student_name }}
+        {% else %}
+          Add Details
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  <footer class="footer">
+    <div class="footer-text">
+      Gov.Polytechnic College,Thottada
+    </div>
+    <div class="footer-text">
+      ( Civil Engineering - 1998 )
+    </div>
+  </footer>
+
+
+
+  <script>
+    
+    function handleSquareSlotClick(event) {
+      event.preventDefault();
+  
+      
+      const password = event.currentTarget.dataset.password;
+  
+      
+      const nameTag = event.currentTarget.querySelector(".name-tag");
+      const isOccupied = nameTag.textContent.trim() !== "Add Details";
+  
+      if (isOccupied) {
+       
+        const editConfirmation = confirm("Do you want to edit an already occupied slot?");
+        if (!editConfirmation) {
+          
+          return;
+        }
+      }
+  
+      
+      const enteredPassword = prompt("Enter the password:");
+  
+      
+      if (enteredPassword === password) {
+        
+        const editPageUrl = event.currentTarget.getAttribute("href");
+        window.location.href = editPageUrl;
+      } else {
+  
+        alert("Incorrect password. Please try again.");
+      }
+    }
+  
+    const squareSlots = document.querySelectorAll(".square-slot");
+    squareSlots.forEach((slot) => {
+      slot.addEventListener("click", handleSquareSlotClick);
+    });
+  </script>
+</body>
+</html>
